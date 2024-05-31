@@ -48,6 +48,10 @@ class Task:
 
 
 class RemoteTask(Task):
+    """`Task` to use for remote executions to run the program on Quera
+    Quantum Computers.
+    """
+
     def validate(self) -> None:
         raise NotImplementedError
 
@@ -86,6 +90,8 @@ class RemoteTask(Task):
 
 
 class LocalTask(Task):
+    """`Task` to use for local executions for simulation purposes.."""
+
     def result(self):
         # need a new results type
         # for emulator jobs
@@ -95,9 +101,9 @@ class LocalTask(Task):
         raise NotImplementedError
 
 
-# Report is now just a helper class for
-# organize and analysis data:
 class Report:
+    """Report is a helper class for organizing and analysing data"""
+
     dataframe: pd.DataFrame
     metas: List[Dict]
     geos: List[Geometry]
@@ -133,6 +139,7 @@ class Report:
 
     @property
     def markdown(self) -> str:
+        """Get the markdown representation of the dataframe"""
         return self.dataframe.to_markdown()
 
     def _filter(
@@ -172,16 +179,16 @@ class Report:
 
         Args:
             filter_perfect_filling (bool): whether return will
-            only contain perfect filling shots. Defaults to True.
+                only contain perfect filling shots. Defaults to True.
             clusters: (tuple[int, int], Sequence[Tuple[int, int]]):
-            cluster index to filter shots from. If none are provided
-            all clusters are used, defaults to [].
+                cluster index to filter shots from. If none are provided
+                all clusters are used, defaults to [].
 
         Returns:
             bitstrings (list of ndarray): list corresponding to each
-            task in the report. Each element is an ndarray of shape
-            (nshots, nsites) where nshots is the number of shots for
-            the task and nsites is the number of sites in the task.
+                task in the report. Each element is an ndarray of shape
+                (nshots, nsites) where nshots is the number of shots for
+                the task and nsites is the number of sites in the task.
 
         Note:
             Note that nshots may vary between tasks if filter_perfect_filling
@@ -216,10 +223,10 @@ class Report:
 
         Args:
             filter_perfect_filling (bool): whether return will
-            only contain perfect filling shots. Defaults to True.
-            clusters: (tuple[int, int], Sequence[Tuple[int, int]]):
-            cluster index to filter shots from. If none are provided
-            all clusters are used, defaults to [].
+                only contain perfect filling shots. Defaults to True.
+            clusters (tuple[int, int], Sequence[Tuple[int, int]]):
+                cluster index to filter shots from. If none are provided
+                all clusters are used, defaults to [].
 
         Returns:
             bitstrings (list of ndarray): list corresponding to each
@@ -234,6 +241,15 @@ class Report:
         """
 
         def generate_counts(bitstring):
+            """Get the counts associated with a particular bitstring
+
+            Args:
+            bitstring: Bitstring representation
+                only contain perfect filling shots. Defaults to True.
+
+            Return:
+                counts associated with a particular bitstring
+            """
             output = np.unique(bitstring, axis=0, return_counts=True)
 
             count_list = [
@@ -259,7 +275,10 @@ class Report:
 
         Args:
             filter_perfect_filling (bool, optional): whether return will
-            only contain perfect filling shots. Defaults to True.
+                only contain perfect filling shots. Defaults to True.
+            clusters (tuple[int, int], Sequence[Tuple[int, int]]):
+                cluster index to filter shots from. If none are provided
+                all clusters are used, defaults to [].
 
         Return:
             per-site rydberg density for each task as a pandas DataFrame or Series.
